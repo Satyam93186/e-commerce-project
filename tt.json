@@ -1,0 +1,30 @@
+{
+  "name": "ecommerce-platform",
+  "version": "1.0.0",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "turbo run dev --parallel",
+    "build": "turbo run build",
+    "test": "turbo run test",
+    "lint": "turbo run lint",
+    "migrate": "cd packages/database && prisma migrate dev",
+    "generate": "cd packages/database && prisma generate",
+    "seed": "cd packages/database && prisma db seed",
+    "docker:up": "docker-compose up -d",
+    "docker:down": "docker-compose down",
+    "docker:logs": "docker-compose logs -f"
+  },
+  "devDependencies": {
+    "turbo": "^1.10.16",
+    "typescript": "^5.2.2",
+    "@types/node": "^20.8.0",
+    "prettier": "^3.0.3",
+    "eslint": "^8.51.0",
+    "@typescript-eslint/parser": "^6.7.5",
+    "@typescript-eslint/eslint-plugin": "^6.7.5"
+  }
+}
