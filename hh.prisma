@@ -1,0 +1,206 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ============================================
+// USER & AUTH MODELS
+// ============================================
+
+model User {
+  id            String       @id @default(uuid())
+  email         String       @unique
+  passwordHash  String       @map("password_hash")
+  role          Role         @default(BUYER)
+  profile       UserProfile?
+  orders        Order[]
+  products      Product[]
+  notifications Notification[]
+  createdAt     DateTime     @default(now()) @map("created_at")
+  updatedAt     DateTime     @updatedAt @map("updated_at")
+
+  @@map("users")
+  @@index([email])
+  @@index([role])
+}
+
+enum Role {
+  ADMIN
+  SELLER
+  BUYER
+}
+
+model UserProfile {
+  id        String    @id @default(uuid())
+  userId    String    @unique @map("user_id")
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  firstName String?   @map("first_name")
+  lastName  String?   @map("last_name")
+  phone     String?
+  avatar    String?
+  addresses Address[]
+
+  @@map("user_profiles")
+}
+
+model Address {
+  id        String      @id @default(uuid())
+  profileId String      @map("profile_id")
+  profile   UserProfile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  street    String
+  city      String
+  state     String
+  zipCode   String      @map("zip_code")
+  country   String
+  isDefault Boolean     @default(false) @map("is_default")
+  orders    Order[]
+
+  @@map("addresses")
+  @@index([profileId])
+}
+
+// ============================================
+// PRODUCT & INVENTORY MODELS
+// ============================================
+
+model Category {
+  id          String    @id @default(uuid())
+  name        String    @unique
+  description String?
+  products    Product[]
+  createdAt   DateTime  @default(now()) @map("created_at")
+
+  @@map("categories")
+}
+
+model Product {
+  id          String      @id @default(uuid())
+  name        String
+  description String      @db.Text
+  price       Decimal     @db.Decimal(10, 2)
+  categoryId  String      @map("category_id")
+  category    Category    @relation(fields: [categoryId], references: [id])
+  sellerId    String      @map("seller_id")
+  seller      User        @relation(fields: [sellerId], references: [id])
+  images      String[]
+  stock       Stock?
+  orderItems  OrderItem[]
+  createdAt   DateTime    @default(now()) @map("created_at")
+  updatedAt   DateTime    @updatedAt @map("updated_at")
+
+  @@map("products")
+  @@index([categoryId])
+  @@index([sellerId])
+  @@index([price])
+}
+
+model Stock {
+  id          String   @id @default(uuid())
+  productId   String   @unique @map("product_id")
+  product     Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  quantity    Int      @default(0)
+  reserved    Int      @default(0)
+  lastUpdated DateTime @updatedAt @map("last_updated")
+
+  @@map("stock")
+  @@index([productId])
+}
+
+// ============================================
+// ORDER MODELS
+// ============================================
+
+model Order {
+  id                String      @id @default(uuid())
+  userId            String      @map("user_id")
+  user              User        @relation(fields: [userId], references: [id])
+  status            OrderStatus @default(PENDING)
+  totalAmount       Decimal     @db.Decimal(10, 2) @map("total_amount")
+  shippingAddressId String      @map("shipping_address_id")
+  shippingAddress   Address     @relation(fields: [shippingAddressId], references: [id])
+  items             OrderItem[]
+  transaction       Transaction?
+  createdAt         DateTime    @default(now()) @map("created_at")
+  updatedAt         DateTime    @updatedAt @map("updated_at")
+
+  @@map("orders")
+  @@index([userId])
+  @@index([status])
+  @@index([createdAt])
+}
+
+enum OrderStatus {
+  PENDING
+  CONFIRMED
+  PROCESSING
+  SHIPPED
+  DELIVERED
+  CANCELLED
+  FAILED
+}
+
+model OrderItem {
+  id        String  @id @default(uuid())
+  orderId   String  @map("order_id")
+  order     Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  productId String  @map("product_id")
+  product   Product @relation(fields: [productId], references: [id])
+  quantity  Int
+  price     Decimal @db.Decimal(10, 2)
+
+  @@map("order_items")
+  @@index([orderId])
+  @@index([productId])
+}
+
+// ============================================
+// PAYMENT MODELS
+// ============================================
+
+model Transaction {
+  id                String        @id @default(uuid())
+  orderId           String        @unique @map("order_id")
+  order             Order         @relation(fields: [orderId], references: [id])
+  amount            Decimal       @db.Decimal(10, 2)
+  status            PaymentStatus @default(PENDING)
+  paymentMethod     String        @map("payment_method")
+  stripePaymentId   String?       @map("stripe_payment_id")
+  razorpayPaymentId String?       @map("razorpay_payment_id")
+  metadata          Json?
+  createdAt         DateTime      @default(now()) @map("created_at")
+  updatedAt         DateTime      @updatedAt @map("updated_at")
+
+  @@map("transactions")
+  @@index([orderId])
+  @@index([status])
+}
+
+enum PaymentStatus {
+  PENDING
+  COMPLETED
+  FAILED
+  REFUNDED
+}
+
+// ============================================
+// NOTIFICATION MODELS
+// ============================================
+
+model Notification {
+  id        String   @id @default(uuid())
+  userId    String   @map("user_id")
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  type      String
+  title     String
+  message   String   @db.Text
+  read      Boolean  @default(false)
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@map("notifications")
+  @@index([userId])
+  @@index([read])
+}
