@@ -1,0 +1,912 @@
+import React, { useState } from 'react';
+import { Server, Database, Cloud, ShoppingCart, Lock, Layers, GitBranch, Code, Package, Workflow } from 'lucide-react';
+
+const ArchitectureExplorer = () => {
+  const [selectedSection, setSelectedSection] = useState('overview');
+
+  const sections = [
+    { id: 'overview', icon: Layers, title: 'System Overview', color: 'bg-blue-500' },
+    { id: 'microservices', icon: Server, title: 'Microservices', color: 'bg-green-500' },
+    { id: 'database', icon: Database, title: 'Database Schema', color: 'bg-purple-500' },
+    { id: 'auth', icon: Lock, title: 'Authentication Flow', color: 'bg-red-500' },
+    { id: 'order', icon: ShoppingCart, title: 'Order Flow', color: 'bg-yellow-500' },
+    { id: 'deployment', icon: Cloud, title: 'Deployment', color: 'bg-indigo-500' },
+    { id: 'codebase', icon: Code, title: 'Codebase Structure', color: 'bg-pink-500' },
+    { id: 'messaging', icon: Workflow, title: 'Message Queue', color: 'bg-orange-500' },
+  ];
+
+  const renderContent = () => {
+    switch (selectedSection) {
+      case 'overview':
+        return (
+          <div className="space-y-4">
+            <h2 className="text-2xl font-bold text-gray-800">System Architecture Overview</h2>
+            <div className="bg-gradient-to-br from-blue-50 to-indigo-50 p-6 rounded-lg border-2 border-blue-200">
+              <div className="space-y-4">
+                <div className="text-center font-semibold text-lg text-gray-700 mb-6">Full Stack E-Commerce Platform</div>
+                
+                {/* Frontend Layer */}
+                <div className="bg-white p-4 rounded-lg shadow">
+                  <div className="font-bold text-blue-600 mb-2">Frontend Layer</div>
+                  <div className="text-sm text-gray-600">Next.js 14 + TypeScript + Tailwind CSS</div>
+                  <div className="mt-2 text-xs text-gray-500">State: Zustand | Data Fetching: React Query</div>
+                </div>
+
+                <div className="text-center text-2xl">↕️</div>
+
+                {/* API Gateway */}
+                <div className="bg-white p-4 rounded-lg shadow border-l-4 border-green-500">
+                  <div className="font-bold text-green-600 mb-2">API Gateway (NestJS)</div>
+                  <div className="text-xs text-gray-500">Request Routing | Authentication | Rate Limiting</div>
+                </div>
+
+                <div className="text-center text-2xl">↕️</div>
+
+                {/* Microservices */}
+                <div className="grid grid-cols-3 gap-2">
+                  {['Auth Service', 'Inventory Service', 'Order Service', 'Payment Service', 'Notification Service', 'User Service'].map((service) => (
+                    <div key={service} className="bg-green-100 p-3 rounded text-center text-xs font-semibold">
+                      {service}
+                    </div>
+                  ))}
+                </div>
+
+                <div className="text-center text-2xl">↕️</div>
+
+                {/* Data Layer */}
+                <div className="grid grid-cols-3 gap-2">
+                  <div className="bg-purple-100 p-3 rounded text-center text-xs font-semibold">PostgreSQL</div>
+                  <div className="bg-red-100 p-3 rounded text-center text-xs font-semibold">Redis Cache</div>
+                  <div className="bg-orange-100 p-3 rounded text-center text-xs font-semibold">RabbitMQ</div>
+                </div>
+
+                <div className="text-center text-2xl">↕️</div>
+
+                {/* Cloud */}
+                <div className="bg-indigo-100 p-4 rounded-lg text-center">
+                  <div className="font-bold text-indigo-600">AWS Cloud Infrastructure</div>
+                  <div className="text-xs text-gray-500 mt-1">ECS/Kubernetes | S3 | RDS | ElastiCache</div>
+                </div>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-2 gap-4 mt-4">
+              <div className="bg-blue-50 p-4 rounded-lg">
+                <h3 className="font-bold text-sm mb-2">Tech Stack</h3>
+                <ul className="text-xs space-y-1">
+                  <li>✅ TypeScript (100%)</li>
+                  <li>✅ NestJS Microservices</li>
+                  <li>✅ Next.js 14 App Router</li>
+                  <li>✅ PostgreSQL + TypeORM</li>
+                  <li>✅ Redis + RabbitMQ</li>
+                </ul>
+              </div>
+              <div className="bg-green-50 p-4 rounded-lg">
+                <h3 className="font-bold text-sm mb-2">Key Features</h3>
+                <ul className="text-xs space-y-1">
+                  <li>🔐 Role-based Access Control</li>
+                  <li>💳 Stripe/Razorpay Integration</li>
+                  <li>📦 Real-time Inventory</li>
+                  <li>🚀 Auto-scaling Services</li>
+                  <li>📊 Admin Dashboard</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        );
+
+      case 'microservices':
+        return (
+          <div className="space-y-4">
+            <h2 className="text-2xl font-bold text-gray-800">Microservices Architecture</h2>
+            
+            {[
+              { name: 'Auth Service', port: '3001', desc: 'JWT authentication, user registration, role management', db: 'users, roles, permissions' },
+              { name: 'Inventory Service', port: '3002', desc: 'Product management, stock tracking, categories', db: 'products, categories, stock, suppliers' },
+              { name: 'Order Service', port: '3003', desc: 'Order creation, order history, order status', db: 'orders, order_items, shipping_addresses' },
+              { name: 'Payment Service', port: '3004', desc: 'Payment processing, Stripe/Razorpay integration', db: 'transactions, payment_methods, refunds' },
+              { name: 'Notification Service', port: '3005', desc: 'Email/SMS notifications, order updates', db: 'notifications, templates' },
+              { name: 'User Service', port: '3006', desc: 'User profiles, addresses, preferences', db: 'user_profiles, addresses, wishlists' },
+            ].map((service) => (
+              <div key={service.name} className="bg-white border-2 border-green-200 rounded-lg p-4 hover:shadow-lg transition-shadow">
+                <div className="flex items-start justify-between">
+                  <div className="flex-1">
+                    <div className="flex items-center gap-2 mb-2">
+                      <Server className="w-5 h-5 text-green-600" />
+                      <h3 className="font-bold text-lg">{service.name}</h3>
+                      <span className="text-xs bg-green-100 px-2 py-1 rounded">Port: {service.port}</span>
+                    </div>
+                    <p className="text-sm text-gray-600 mb-2">{service.desc}</p>
+                    <div className="text-xs text-gray-500">
+                      <span className="font-semibold">Database Tables:</span> {service.db}
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="mt-3 pt-3 border-t border-gray-200">
+                  <div className="text-xs font-mono bg-gray-50 p-2 rounded">
+                    <div>📁 /apps/{service.name.toLowerCase().replace(' ', '-')}</div>
+                    <div className="ml-4 text-gray-600">
+                      ├── src/modules/<br/>
+                      ├── src/common/<br/>
+                      ├── src/config/<br/>
+                      └── main.ts
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))}
+
+            <div className="bg-yellow-50 p-4 rounded-lg border-l-4 border-yellow-500">
+              <h3 className="font-bold text-sm mb-2">Communication Pattern</h3>
+              <ul className="text-xs space-y-1">
+                <li>🔄 <strong>Synchronous:</strong> API Gateway → Microservices (REST/gRPC)</li>
+                <li>📨 <strong>Asynchronous:</strong> Service → RabbitMQ → Service (Events)</li>
+                <li>⚡ <strong>Caching:</strong> Redis for frequently accessed data</li>
+              </ul>
+            </div>
+          </div>
+        );
+
+      case 'database':
+        return (
+          <div className="space-y-4">
+            <h2 className="text-2xl font-bold text-gray-800">Database Schema Design</h2>
+            
+            <div className="bg-purple-50 p-4 rounded-lg border-2 border-purple-200">
+              <h3 className="font-bold mb-3 flex items-center gap-2">
+                <Database className="w-5 h-5" />
+                Users & Auth Schema
+              </h3>
+              <div className="bg-white p-3 rounded text-xs font-mono">
+                <div className="font-bold text-purple-600 mb-2">users</div>
+                <div className="ml-3 space-y-1 text-gray-700">
+                  <div>• id (UUID, PK)</div>
+                  <div>• email (VARCHAR, UNIQUE)</div>
+                  <div>• password_hash (VARCHAR)</div>
+                  <div>• role (ENUM: admin, seller, buyer)</div>
+                  <div>• created_at, updated_at (TIMESTAMP)</div>
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-green-50 p-4 rounded-lg border-2 border-green-200">
+              <h3 className="font-bold mb-3">Products & Inventory Schema</h3>
+              <div className="grid grid-cols-2 gap-3">
+                <div className="bg-white p-3 rounded text-xs font-mono">
+                  <div className="font-bold text-green-600 mb-2">products</div>
+                  <div className="ml-3 space-y-1 text-gray-700">
+                    <div>• id (UUID, PK)</div>
+                    <div>• name, description (VARCHAR)</div>
+                    <div>• price (DECIMAL)</div>
+                    <div>• category_id (UUID, FK)</div>
+                    <div>• seller_id (UUID, FK)</div>
+                    <div>• images (JSONB)</div>
+                  </div>
+                </div>
+                <div className="bg-white p-3 rounded text-xs font-mono">
+                  <div className="font-bold text-green-600 mb-2">stock</div>
+                  <div className="ml-3 space-y-1 text-gray-700">
+                    <div>• id (UUID, PK)</div>
+                    <div>• product_id (UUID, FK)</div>
+                    <div>• quantity (INTEGER)</div>
+                    <div>• reserved (INTEGER)</div>
+                    <div>• last_updated (TIMESTAMP)</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-yellow-50 p-4 rounded-lg border-2 border-yellow-200">
+              <h3 className="font-bold mb-3">Orders Schema</h3>
+              <div className="grid grid-cols-2 gap-3">
+                <div className="bg-white p-3 rounded text-xs font-mono">
+                  <div className="font-bold text-yellow-600 mb-2">orders</div>
+                  <div className="ml-3 space-y-1 text-gray-700">
+                    <div>• id (UUID, PK)</div>
+                    <div>• user_id (UUID, FK)</div>
+                    <div>• status (ENUM)</div>
+                    <div>• total_amount (DECIMAL)</div>
+                    <div>• shipping_address_id (FK)</div>
+                    <div>• created_at (TIMESTAMP)</div>
+                  </div>
+                </div>
+                <div className="bg-white p-3 rounded text-xs font-mono">
+                  <div className="font-bold text-yellow-600 mb-2">order_items</div>
+                  <div className="ml-3 space-y-1 text-gray-700">
+                    <div>• id (UUID, PK)</div>
+                    <div>• order_id (UUID, FK)</div>
+                    <div>• product_id (UUID, FK)</div>
+                    <div>• quantity (INTEGER)</div>
+                    <div>• price (DECIMAL)</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-red-50 p-4 rounded-lg border-2 border-red-200">
+              <h3 className="font-bold mb-3">Payments Schema</h3>
+              <div className="bg-white p-3 rounded text-xs font-mono">
+                <div className="font-bold text-red-600 mb-2">transactions</div>
+                <div className="ml-3 space-y-1 text-gray-700">
+                  <div>• id (UUID, PK)</div>
+                  <div>• order_id (UUID, FK)</div>
+                  <div>• payment_method (ENUM)</div>
+                  <div>• amount (DECIMAL)</div>
+                  <div>• status (ENUM: pending, completed, failed)</div>
+                  <div>• stripe_payment_id (VARCHAR)</div>
+                  <div>• created_at (TIMESTAMP)</div>
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-blue-50 p-3 rounded border-l-4 border-blue-500 text-xs">
+              <strong>Database per Service Pattern:</strong> Each microservice has its own database schema for loose coupling
+            </div>
+          </div>
+        );
+
+      case 'auth':
+        return (
+          <div className="space-y-4">
+            <h2 className="text-2xl font-bold text-gray-800">Authentication Flow</h2>
+            
+            <div className="bg-gradient-to-r from-red-50 to-pink-50 p-6 rounded-lg border-2 border-red-200">
+              <h3 className="font-bold mb-4 text-center">User Registration & Login Flow</h3>
+              
+              <div className="space-y-3">
+                <div className="flex items-center gap-3">
+                  <div className="bg-white px-4 py-2 rounded shadow text-sm font-semibold w-40">1. User Submits</div>
+                  <div className="flex-1 text-xs">Email + Password to <code>/auth/register</code> or <code>/auth/login</code></div>
+                </div>
+                
+                <div className="ml-8 text-xl">↓</div>
+                
+                <div className="flex items-center gap-3">
+                  <div className="bg-white px-4 py-2 rounded shadow text-sm font-semibold w-40">2. Auth Service</div>
+                  <div className="flex-1 text-xs">Validates credentials, checks database, hashes password (bcrypt)</div>
+                </div>
+                
+                <div className="ml-8 text-xl">↓</div>
+                
+                <div className="flex items-center gap-3">
+                  <div className="bg-white px-4 py-2 rounded shadow text-sm font-semibold w-40">3. Generate JWT</div>
+                  <div className="flex-1 text-xs">Creates access token (15min) + refresh token (7 days)</div>
+                </div>
+                
+                <div className="ml-8 text-xl">↓</div>
+                
+                <div className="flex items-center gap-3">
+                  <div className="bg-white px-4 py-2 rounded shadow text-sm font-semibold w-40">4. Return Tokens</div>
+                  <div className="flex-1 text-xs">Sends tokens to frontend, stored in httpOnly cookies</div>
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-white p-4 rounded-lg border-2 border-gray-200">
+              <h3 className="font-bold mb-3">JWT Token Structure</h3>
+              <div className="bg-gray-900 text-green-400 p-4 rounded font-mono text-xs">
+                <div>&#123;</div>
+                <div className="ml-4">"sub": "user-uuid-here",</div>
+                <div className="ml-4">"email": "user@example.com",</div>
+                <div className="ml-4">"roles": ["buyer"],</div>
+                <div className="ml-4">"iat": 1699123456,</div>
+                <div className="ml-4">"exp": 1699124356</div>
+                <div>&#125;</div>
+              </div>
+            </div>
+
+            <div className="bg-gradient-to-r from-blue-50 to-indigo-50 p-6 rounded-lg border-2 border-blue-200">
+              <h3 className="font-bold mb-4 text-center">Protected Route Access Flow</h3>
+              
+              <div className="space-y-3">
+                <div className="flex items-center gap-3">
+                  <div className="bg-white px-4 py-2 rounded shadow text-sm font-semibold w-40">1. Request</div>
+                  <div className="flex-1 text-xs">User sends request with JWT in Authorization header</div>
+                </div>
+                
+                <div className="ml-8 text-xl">↓</div>
+                
+                <div className="flex items-center gap-3">
+                  <div className="bg-white px-4 py-2 rounded shadow text-sm font-semibold w-40">2. API Gateway</div>
+                  <div className="flex-1 text-xs">Validates JWT signature and expiration</div>
+                </div>
+                
+                <div className="ml-8 text-xl">↓</div>
+                
+                <div className="flex items-center gap-3">
+                  <div className="bg-white px-4 py-2 rounded shadow text-sm font-semibold w-40">3. Role Check</div>
+                  <div className="flex-1 text-xs">NestJS Guard checks if user has required role</div>
+                </div>
+                
+                <div className="ml-8 text-xl">↓</div>
+                
+                <div className="flex items-center gap-3">
+                  <div className="bg-white px-4 py-2 rounded shadow text-sm font-semibold w-40">4. Allow/Deny</div>
+                  <div className="flex-1 text-xs">If authorized → proceed, else → 403 Forbidden</div>
+                </div>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-3 gap-3">
+              <div className="bg-green-50 p-3 rounded border-l-4 border-green-500">
+                <div className="font-bold text-sm mb-1">Buyer Role</div>
+                <div className="text-xs">Browse, purchase, view orders</div>
+              </div>
+              <div className="bg-yellow-50 p-3 rounded border-l-4 border-yellow-500">
+                <div className="font-bold text-sm mb-1">Seller Role</div>
+                <div className="text-xs">Manage products, view sales</div>
+              </div>
+              <div className="bg-red-50 p-3 rounded border-l-4 border-red-500">
+                <div className="font-bold text-sm mb-1">Admin Role</div>
+                <div className="text-xs">Full system access, analytics</div>
+              </div>
+            </div>
+          </div>
+        );
+
+      case 'order':
+        return (
+          <div className="space-y-4">
+            <h2 className="text-2xl font-bold text-gray-800">Complete Order Flow (Saga Pattern)</h2>
+            
+            <div className="bg-gradient-to-br from-yellow-50 to-orange-50 p-6 rounded-lg border-2 border-yellow-300">
+              <div className="space-y-4">
+                <div className="bg-white p-4 rounded-lg shadow-md">
+                  <div className="flex items-center gap-3 mb-2">
+                    <div className="bg-blue-500 text-white px-3 py-1 rounded-full text-sm font-bold">Step 1</div>
+                    <div className="font-bold">User Initiates Checkout</div>
+                  </div>
+                  <div className="text-xs text-gray-600 ml-12">
+                    Frontend sends cart items + shipping address to Order Service
+                  </div>
+                  <div className="mt-2 ml-12 text-xs font-mono bg-gray-50 p-2 rounded">
+                    POST /orders → &#123; items, shippingAddressId, userId &#125;
+                  </div>
+                </div>
+
+                <div className="text-center text-2xl">↓</div>
+
+                <div className="bg-white p-4 rounded-lg shadow-md">
+                  <div className="flex items-center gap-3 mb-2">
+                    <div className="bg-green-500 text-white px-3 py-1 rounded-full text-sm font-bold">Step 2</div>
+                    <div className="font-bold">Order Service Creates Order</div>
+                  </div>
+                  <div className="text-xs text-gray-600 ml-12">
+                    Status: PENDING | Publishes "order.created" event to RabbitMQ
+                  </div>
+                  <div className="mt-2 ml-12 text-xs font-mono bg-gray-50 p-2 rounded">
+                    await rabbitMQ.publish('order.created', orderData)
+                  </div>
+                </div>
+
+                <div className="text-center text-2xl">↓</div>
+
+                <div className="bg-white p-4 rounded-lg shadow-md">
+                  <div className="flex items-center gap-3 mb-2">
+                    <div className="bg-purple-500 text-white px-3 py-1 rounded-full text-sm font-bold">Step 3</div>
+                    <div className="font-bold">Inventory Service Reserves Stock</div>
+                  </div>
+                  <div className="text-xs text-gray-600 ml-12">
+                    Listens to "order.created" → Checks stock → Reserves items
+                  </div>
+                  <div className="mt-2 ml-12 text-xs">
+                    <span className="text-green-600 font-semibold">✓ Success:</span> Publishes "inventory.reserved"<br/>
+                    <span className="text-red-600 font-semibold">✗ Failure:</span> Publishes "inventory.failed" → Rollback order
+                  </div>
+                </div>
+
+                <div className="text-center text-2xl">↓</div>
+
+                <div className="bg-white p-4 rounded-lg shadow-md">
+                  <div className="flex items-center gap-3 mb-2">
+                    <div className="bg-red-500 text-white px-3 py-1 rounded-full text-sm font-bold">Step 4</div>
+                    <div className="font-bold">Payment Service Processes Payment</div>
+                  </div>
+                  <div className="text-xs text-gray-600 ml-12">
+                    Listens to "inventory.reserved" → Creates Stripe payment intent
+                  </div>
+                  <div className="mt-2 ml-12 text-xs font-mono bg-gray-50 p-2 rounded">
+                    const intent = await stripe.paymentIntents.create(...)
+                  </div>
+                  <div className="mt-2 ml-12 text-xs">
+                    <span className="text-green-600 font-semibold">✓ Success:</span> Publishes "payment.completed"<br/>
+                    <span className="text-red-600 font-semibold">✗ Failure:</span> Publishes "payment.failed" → Release inventory
+                  </div>
+                </div>
+
+                <div className="text-center text-2xl">↓</div>
+
+                <div className="bg-white p-4 rounded-lg shadow-md">
+                  <div className="flex items-center gap-3 mb-2">
+                    <div className="bg-indigo-500 text-white px-3 py-1 rounded-full text-sm font-bold">Step 5</div>
+                    <div className="font-bold">Order Service Updates Status</div>
+                  </div>
+                  <div className="text-xs text-gray-600 ml-12">
+                    Listens to "payment.completed" → Updates order status to CONFIRMED
+                  </div>
+                  <div className="mt-2 ml-12 text-xs font-mono bg-gray-50 p-2 rounded">
+                    order.status = 'CONFIRMED' | order.save()
+                  </div>
+                </div>
+
+                <div className="text-center text-2xl">↓</div>
+
+                <div className="bg-white p-4 rounded-lg shadow-md">
+                  <div className="flex items-center gap-3 mb-2">
+                    <div className="bg-pink-500 text-white px-3 py-1 rounded-full text-sm font-bold">Step 6</div>
+                    <div className="font-bold">Notification Service Sends Confirmation</div>
+                  </div>
+                  <div className="text-xs text-gray-600 ml-12">
+                    Listens to "order.confirmed" → Sends email/SMS to user
+                  </div>
+                  <div className="mt-2 ml-12 text-xs">
+                    📧 Email: "Order #12345 confirmed!"
+                  </div>
+                </div>
+
+                <div className="text-center text-2xl">↓</div>
+
+                <div className="bg-green-100 p-4 rounded-lg border-2 border-green-500 text-center">
+                  <div className="font-bold text-green-700 text-lg">✓ Order Complete!</div>
+                  <div className="text-xs text-gray-600 mt-1">User receives confirmation | Seller gets notification</div>
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-red-50 p-4 rounded-lg border-l-4 border-red-500">
+              <h3 className="font-bold text-sm mb-2">Rollback Scenarios (Compensating Transactions)</h3>
+              <ul className="text-xs space-y-1">
+                <li>❌ <strong>Inventory fails:</strong> Order cancelled, user notified</li>
+                <li>❌ <strong>Payment fails:</strong> Inventory released, order status = FAILED</li>
+                <li>❌ <strong>Timeout:</strong> All services compensate, refund initiated if payment succeeded</li>
+              </ul>
+            </div>
+          </div>
+        );
+
+      case 'deployment':
+        return (
+          <div className="space-y-4">
+            <h2 className="text-2xl font-bold text-gray-800">Cloud Deployment Architecture</h2>
+            
+            <div className="bg-gradient-to-br from-indigo-50 to-blue-50 p-6 rounded-lg border-2 border-indigo-200">
+              <h3 className="font-bold text-center mb-4">AWS Infrastructure</h3>
+              
+              <div className="space-y-3">
+                <div className="bg-white p-4 rounded-lg shadow">
+                  <div className="font-bold text-blue-600 mb-2">Route 53 (DNS)</div>
+                  <div className="text-xs">api.yourstore.com → Load Balancer</div>
+                </div>
+
+                <div className="text-center text-xl">↓</div>
+
+                <div className="bg-white p-4 rounded-lg shadow">
+                  <div className="font-bold text-green-600 mb-2">Application Load Balancer (ALB)</div>
+                  <div className="text-xs">Distributes traffic across ECS tasks | SSL/TLS termination</div>
+                </div>
+
+                <div className="text-center text-xl">↓</div>
+
+                <div className="bg-white p-4 rounded-lg shadow">
+                  <div className="font-bold text-purple-600 mb-2">ECS Cluster / Kubernetes</div>
+                  <div className="grid grid-cols-3 gap-2 mt-2">
+                    {['API Gateway', 'Auth Service', 'Order Service', 'Payment Service', 'Inventory Service', 'User Service'].map(s => (
+                      <div key={s} className="bg-purple-50 p-2 rounded text-xs text-center">{s}</div>
+                    ))}
+                  </div>
+                  <div className="text-xs mt-2 text-gray-600">Auto-scaling based on CPU/Memory metrics</div>
+                </div>
+
+                <div className="text-center text-xl">↓</div>
+
+                <div className="grid grid-cols-3 gap-2">
+                  <div className="bg-white p-3 rounded-lg shadow">
+                    <div className="font-bold text-sm text-purple-600">RDS PostgreSQL</div>
+                    <div className="text-xs mt-1">Multi-AZ deployment</div>
+                  </div>
+                  <div className="bg-white p-3 rounded-lg shadow">
+                    <div className="font-bold text-sm text-red-600">ElastiCache Redis</div>
+                    <div className="text-xs mt-1">Cluster mode enabled</div>
+                  </div>
+                  <div className="bg-white p-3 rounded-lg shadow">
+                    <div className="font-bold text-sm text-orange-600">Amazon MQ</div>
+                    <div className="text-xs mt-1">RabbitMQ managed</div>
+                  </div>
+                </div>
+
+                <div className="bg-white p-4 rounded-lg shadow mt-3">
+                  <div className="font-bold text-indigo-600 mb-2">S3 Buckets</div>
+                  <div className="text-xs">Product images, user uploads | CloudFront CDN for delivery</div>
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-white p-4 rounded-lg border-2 border-gray-200">
+              <h3 className="font-bold mb-3">Docker Containerization</h3>
+              <div className="bg-gray-900 text-green-400 p-4 rounded font-mono text-xs overflow-x-auto">
+                <div># Multi-stage Dockerfile for NestJS Service</div>
+                <div className="text-blue-400">FROM</div> node:18-alpine <div className="text-blue-400">AS</div> builder<br/>
+                <div className="text-blue-400">WORKDIR</div> /app<br/>
+                <div className="text-blue-400">COPY</div> package*.json ./<br/>
+                <div className="text-blue-400">RUN</div> npm ci<br/>
+                <div className="text-blue-400">COPY</div> . .<br/>
+                <div className="text-blue-400">RUN</div> npm run build<br/><br/>
+                
+                <div className="text-blue-400">FROM</div> node:18-alpine<br/>
+                <div className="text-blue-400">WORKDIR</div> /app<br/>
+                <div className="text-blue-400">COPY</div> --from=builder /app/dist ./dist<br/>
+                <div className="text-blue-400">COPY</div> --from=builder /app/node_modules ./node_modules<br/>
+                <div className="text-blue-400">EXPOSE</div> 3000<br/>
+                <div className="text-blue-400">CMD</div> ["node", "dist/main.js"]
+              </div>
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+              <div className="bg-blue-50 p-4 rounded-lg">
+                <h3 className="font-bold text-sm mb-2">CI/CD Pipeline (GitHub Actions)</h3>
+                <div className="space-y-1 text-xs">
+                  <div>1. ✅ Run tests (Jest)</div>
+                  <div>2. 🔍 Lint & type check</div>
+                  <div>3. 🐳 Build Docker images</div>
+                  <div>4. 📤 Push to ECR</div>
+                  <div>5. 🚀 Deploy to ECS/K8s</div>
+                  <div>6. ✓ Health check</div>
+                </div>
+              </div>
+              <div className="bg-green-50 p-4 rounded-lg">
+                <h3 className="font-bold text-sm mb-2">Monitoring & Logging</h3>
+                <div className="space-y-1 text-xs">
+                  <div>📊 CloudWatch Metrics</div>
+                  <div>📝 Centralized logging (ELK)</div>
+                  <div>🔍 Distributed tracing (Jaeger)</div>
+                  <div>🚨 Alerts (PagerDuty/Slack)</div>
+                  <div>📈 Grafana dashboards</div>
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-yellow-50 p-3 rounded border-l-4 border-yellow-500 text-xs">
+              <strong>Auto-Scaling:</strong> Services scale 2-10 instances based on CPU &gt; 70% or request count &gt; 1000/min
+            </div>
+          </div>
+        );
+
+      case 'codebase':
+        return (
+          <div className="space-y-4">
+            <h2 className="text-2xl font-bold text-gray-800">Codebase Structure (Monorepo)</h2>
+            
+            <div className="bg-gradient-to-br from-pink-50 to-purple-50 p-6 rounded-lg border-2 border-pink-200">
+              <h3 className="font-bold mb-3">Project Root Structure</h3>
+              <div className="bg-gray-900 text-green-400 p-4 rounded font-mono text-xs">
+                <div>📁 ecommerce-platform/</div>
+                <div className="ml-4">├── 📁 apps/</div>
+                <div className="ml-8">├── 📁 frontend/ <span className="text-gray-500">(Next.js)</span></div>
+                <div className="ml-8">├── 📁 api-gateway/ <span className="text-gray-500">(NestJS)</span></div>
+                <div className="ml-8">├── 📁 auth-service/ <span className="text-gray-500">(NestJS)</span></div>
+                <div className="ml-8">├── 📁 inventory-service/</div>
+                <div className="ml-8">├── 📁 order-service/</div>
+                <div className="ml-8">├── 📁 payment-service/</div>
+                <div className="ml-8">└── 📁 notification-service/</div>
+                <div className="ml-4">├── 📁 packages/</div>
+                <div className="ml-8">├── 📁 shared-types/ <span className="text-gray-500">(TypeScript types)</span></div>
+                <div className="ml-8">├── 📁 common-utils/ <span className="text-gray-500">(Shared utilities)</span></div>
+                <div className="ml-8">└── 📁 config/ <span className="text-gray-500">(Environment configs)</span></div>
+                <div className="ml-4">├── 📁 infrastructure/</div>
+                <div className="ml-8">├── 📁 docker/</div>
+                <div className="ml-8">├── 📁 kubernetes/</div>
+                <div className="ml-8">└── 📁 terraform/</div>
+                <div className="ml-4">├── package.json</div>
+                <div className="ml-4">├── turbo.json <span className="text-gray-500">or nx.json</span></div>
+                <div className="ml-4">└── tsconfig.base.json</div>
+              </div>
+            </div>
+
+            <div className="bg-white p-4 rounded-lg border-2 border-blue-200">
+              <h3 className="font-bold mb-3 flex items-center gap-2">
+                <Code className="w-5 h-5 text-blue-600" />
+                NestJS Microservice Structure
+              </h3>
+              <div className="bg-gray-900 text-green-400 p-4 rounded font-mono text-xs">
+                <div>📁 order-service/</div>
+                <div className="ml-4">├── 📁 src/</div>
+                <div className="ml-8">├── 📁 modules/</div>
+                <div className="ml-12">└── 📁 orders/</div>
+                <div className="ml-16">├── 📁 dto/</div>
+                <div className="ml-20">├── create-order.dto.ts</div>
+                <div className="ml-20">└── update-order.dto.ts</div>
+                <div className="ml-16">├── 📁 entities/</div>
+                <div className="ml-20">└── order.entity.ts</div>
+                <div className="ml-16">├── 📁 repositories/</div>
+                <div className="ml-20">└── order.repository.ts</div>
+                <div className="ml-16">├── orders.controller.ts</div>
+                <div className="ml-16">├── orders.service.ts</div>
+                <div className="ml-16">└── orders.module.ts</div>
+                <div className="ml-8">├── 📁 common/</div>
+                <div className="ml-12">├── 📁 decorators/</div>
+                <div className="ml-12">├── 📁 guards/</div>
+                <div className="ml-12">├── 📁 interceptors/</div>
+                <div className="ml-12">└── 📁 filters/</div>
+                <div className="ml-8">├── 📁 config/</div>
+                <div className="ml-12">└── database.config.ts</div>
+                <div className="ml-8">├── main.ts</div>
+                <div className="ml-8">└── app.module.ts</div>
+                <div className="ml-4">├── test/</div>
+                <div className="ml-4">├── Dockerfile</div>
+                <div className="ml-4">└── package.json</div>
+              </div>
+            </div>
+
+            <div className="bg-white p-4 rounded-lg border-2 border-indigo-200">
+              <h3 className="font-bold mb-3">Next.js Frontend Structure</h3>
+              <div className="bg-gray-900 text-green-400 p-4 rounded font-mono text-xs">
+                <div>📁 frontend/</div>
+                <div className="ml-4">├── 📁 app/ <span className="text-gray-500">(App Router)</span></div>
+                <div className="ml-8">├── (auth)/</div>
+                <div className="ml-12">├── login/page.tsx</div>
+                <div className="ml-12">└── register/page.tsx</div>
+                <div className="ml-8">├── (shop)/</div>
+                <div className="ml-12">├── products/page.tsx</div>
+                <div className="ml-12">├── cart/page.tsx</div>
+                <div className="ml-12">└── checkout/page.tsx</div>
+                <div className="ml-8">├── (dashboard)/</div>
+                <div className="ml-12">├── admin/page.tsx</div>
+                <div className="ml-12">└── seller/page.tsx</div>
+                <div className="ml-8">└── layout.tsx</div>
+                <div className="ml-4">├── 📁 components/</div>
+                <div className="ml-8">├── ui/ <span className="text-gray-500">(Button, Input, Card)</span></div>
+                <div className="ml-8">├── forms/ <span className="text-gray-500">(LoginForm, ProductForm)</span></div>
+                <div className="ml-8">└── layouts/ <span className="text-gray-500">(Header, Footer)</span></div>
+                <div className="ml-4">├── 📁 lib/</div>
+                <div className="ml-8">├── api-client.ts</div>
+                <div className="ml-8">└── utils.ts</div>
+                <div className="ml-4">├── 📁 store/</div>
+                <div className="ml-8">├── cart.store.ts</div>
+                <div className="ml-8">└── auth.store.ts</div>
+                <div className="ml-4">├── 📁 types/</div>
+                <div className="ml-8">└── index.ts</div>
+                <div className="ml-4">└── tailwind.config.js</div>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+              <div className="bg-purple-50 p-4 rounded-lg">
+                <h3 className="font-bold text-sm mb-2">Shared Types Package</h3>
+                <div className="bg-gray-900 text-green-400 p-3 rounded font-mono text-xs">
+                  <div>export interface User &#123;</div>
+                  <div className="ml-2">id: string;</div>
+                  <div className="ml-2">email: string;</div>
+                  <div className="ml-2">role: UserRole;</div>
+                  <div>&#125;</div>
+                </div>
+              </div>
+              <div className="bg-blue-50 p-4 rounded-lg">
+                <h3 className="font-bold text-sm mb-2">Common Utils</h3>
+                <div className="text-xs space-y-1">
+                  <div>• formatCurrency()</div>
+                  <div>• generateId()</div>
+                  <div>• validateEmail()</div>
+                  <div>• logger utilities</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        );
+
+      case 'messaging':
+        return (
+          <div className="space-y-4">
+            <h2 className="text-2xl font-bold text-gray-800">RabbitMQ Message Queue Architecture</h2>
+            
+            <div className="bg-gradient-to-br from-orange-50 to-red-50 p-6 rounded-lg border-2 border-orange-200">
+              <h3 className="font-bold text-center mb-4">Event-Driven Communication</h3>
+              
+              <div className="space-y-4">
+                <div className="bg-white p-4 rounded-lg shadow">
+                  <div className="font-bold text-orange-600 mb-2">Exchange: orders.exchange</div>
+                  <div className="text-xs mb-3">Type: Topic | Durable: true</div>
+                  
+                  <div className="grid grid-cols-2 gap-3">
+                    <div className="bg-orange-50 p-3 rounded">
+                      <div className="font-semibold text-xs mb-2">Events Published:</div>
+                      <div className="text-xs space-y-1">
+                        <div>• order.created</div>
+                        <div>• order.confirmed</div>
+                        <div>• order.cancelled</div>
+                        <div>• order.shipped</div>
+                      </div>
+                    </div>
+                    <div className="bg-blue-50 p-3 rounded">
+                      <div className="font-semibold text-xs mb-2">Consumers:</div>
+                      <div className="text-xs space-y-1">
+                        <div>→ Inventory Service</div>
+                        <div>→ Payment Service</div>
+                        <div>→ Notification Service</div>
+                        <div>→ Analytics Service</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="bg-white p-4 rounded-lg shadow">
+                  <div className="font-bold text-green-600 mb-2">Exchange: inventory.exchange</div>
+                  <div className="text-xs mb-3">Type: Topic | Durable: true</div>
+                  
+                  <div className="grid grid-cols-2 gap-3">
+                    <div className="bg-green-50 p-3 rounded">
+                      <div className="font-semibold text-xs mb-2">Events Published:</div>
+                      <div className="text-xs space-y-1">
+                        <div>• inventory.reserved</div>
+                        <div>• inventory.released</div>
+                        <div>• inventory.failed</div>
+                        <div>• stock.low</div>
+                      </div>
+                    </div>
+                    <div className="bg-blue-50 p-3 rounded">
+                      <div className="font-semibold text-xs mb-2">Consumers:</div>
+                      <div className="text-xs space-y-1">
+                        <div>→ Order Service</div>
+                        <div>→ Notification Service</div>
+                        <div>→ Analytics Service</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="bg-white p-4 rounded-lg shadow">
+                  <div className="font-bold text-red-600 mb-2">Exchange: payments.exchange</div>
+                  <div className="text-xs mb-3">Type: Topic | Durable: true</div>
+                  
+                  <div className="grid grid-cols-2 gap-3">
+                    <div className="bg-red-50 p-3 rounded">
+                      <div className="font-semibold text-xs mb-2">Events Published:</div>
+                      <div className="text-xs space-y-1">
+                        <div>• payment.initiated</div>
+                        <div>• payment.completed</div>
+                        <div>• payment.failed</div>
+                        <div>• refund.processed</div>
+                      </div>
+                    </div>
+                    <div className="bg-blue-50 p-3 rounded">
+                      <div className="font-semibold text-xs mb-2">Consumers:</div>
+                      <div className="text-xs space-y-1">
+                        <div>→ Order Service</div>
+                        <div>→ Inventory Service</div>
+                        <div>→ Notification Service</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-white p-4 rounded-lg border-2 border-gray-200">
+              <h3 className="font-bold mb-3">Message Publishing (NestJS)</h3>
+              <div className="bg-gray-900 text-green-400 p-4 rounded font-mono text-xs">
+                <div className="text-gray-500">// Order Service - Publishing Event</div>
+                <div><span className="text-blue-400">async</span> createOrder(dto: CreateOrderDto) &#123;</div>
+                <div className="ml-2">const order = <span className="text-blue-400">await</span> <span className="text-yellow-400">this</span>.orderRepo.save(dto);</div>
+                <div className="ml-2"></div>
+                <div className="ml-2"><span className="text-gray-500">// Publish event to RabbitMQ</span></div>
+                <div className="ml-2"><span className="text-blue-400">await</span> <span className="text-yellow-400">this</span>.rabbitMQ.publish(</div>
+                <div className="ml-4"><span className="text-pink-400">'orders.exchange'</span>,</div>
+                <div className="ml-4"><span className="text-pink-400">'order.created'</span>,</div>
+                <div className="ml-4">&#123;</div>
+                <div className="ml-6">orderId: order.id,</div>
+                <div className="ml-6">userId: order.userId,</div>
+                <div className="ml-6">items: order.items,</div>
+                <div className="ml-6">totalAmount: order.totalAmount,</div>
+                <div className="ml-6">timestamp: <span className="text-blue-400">new</span> Date()</div>
+                <div className="ml-4">&#125;</div>
+                <div className="ml-2">);</div>
+                <div className="ml-2"></div>
+                <div className="ml-2"><span className="text-blue-400">return</span> order;</div>
+                <div>&#125;</div>
+              </div>
+            </div>
+
+            <div className="bg-white p-4 rounded-lg border-2 border-gray-200">
+              <h3 className="font-bold mb-3">Message Consuming (NestJS)</h3>
+              <div className="bg-gray-900 text-green-400 p-4 rounded font-mono text-xs">
+                <div className="text-gray-500">// Inventory Service - Consuming Event</div>
+                <div>@EventPattern(<span className="text-pink-400">'order.created'</span>)</div>
+                <div><span className="text-blue-400">async</span> handleOrderCreated(data: OrderCreatedEvent) &#123;</div>
+                <div className="ml-2"><span className="text-blue-400">try</span> &#123;</div>
+                <div className="ml-4"><span className="text-gray-500">// Check stock availability</span></div>
+                <div className="ml-4">const available = <span className="text-blue-400">await</span> <span className="text-yellow-400">this</span>.checkStock(data.items);</div>
+                <div className="ml-4"></div>
+                <div className="ml-4"><span className="text-blue-400">if</span> (available) &#123;</div>
+                <div className="ml-6"><span className="text-gray-500">// Reserve inventory</span></div>
+                <div className="ml-6"><span className="text-blue-400">await</span> <span className="text-yellow-400">this</span>.reserveStock(data.items);</div>
+                <div className="ml-6"></div>
+                <div className="ml-6"><span className="text-gray-500">// Publish success event</span></div>
+                <div className="ml-6"><span className="text-blue-400">await</span> <span className="text-yellow-400">this</span>.rabbitMQ.publish(</div>
+                <div className="ml-8"><span className="text-pink-400">'inventory.exchange'</span>,</div>
+                <div className="ml-8"><span className="text-pink-400">'inventory.reserved'</span>,</div>
+                <div className="ml-8">&#123; orderId: data.orderId &#125;</div>
+                <div className="ml-6">);</div>
+                <div className="ml-4">&#125; <span className="text-blue-400">else</span> &#123;</div>
+                <div className="ml-6"><span className="text-gray-500">// Publish failure event</span></div>
+                <div className="ml-6"><span className="text-blue-400">await</span> <span className="text-yellow-400">this</span>.rabbitMQ.publish(</div>
+                <div className="ml-8"><span className="text-pink-400">'inventory.exchange'</span>,</div>
+                <div className="ml-8"><span className="text-pink-400">'inventory.failed'</span>,</div>
+                <div className="ml-8">&#123; orderId: data.orderId, reason: <span className="text-pink-400">'Out of stock'</span> &#125;</div>
+                <div className="ml-6">);</div>
+                <div className="ml-4">&#125;</div>
+                <div className="ml-2">&#125; <span className="text-blue-400">catch</span> (error) &#123;</div>
+                <div className="ml-4"><span className="text-yellow-400">this</span>.logger.error(<span className="text-pink-400">'Failed to reserve inventory'</span>, error);</div>
+                <div className="ml-4"><span className="text-blue-400">throw</span> error; <span className="text-gray-500">// Message will be retried</span></div>
+                <div className="ml-2">&#125;</div>
+                <div>&#125;</div>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+              <div className="bg-yellow-50 p-4 rounded-lg border-l-4 border-yellow-500">
+                <h3 className="font-bold text-sm mb-2">Dead Letter Queue (DLQ)</h3>
+                <div className="text-xs space-y-1">
+                  <div>• Failed messages after 3 retries</div>
+                  <div>• Manual intervention required</div>
+                  <div>• Logged for debugging</div>
+                </div>
+              </div>
+              <div className="bg-blue-50 p-4 rounded-lg border-l-4 border-blue-500">
+                <h3 className="font-bold text-sm mb-2">Retry Strategy</h3>
+                <div className="text-xs space-y-1">
+                  <div>• Exponential backoff</div>
+                  <div>• Max 3 attempts</div>
+                  <div>• 5s, 30s, 2min delays</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        );
+
+      default:
+        return null;
+    }
+  };
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 p-6">
+      <div className="max-w-7xl mx-auto">
+        <h1 className="text-4xl font-bold text-center mb-2 text-gray-800">
+          E-Commerce Platform Architecture
+        </h1>
+        <p className="text-center text-gray-600 mb-8">
+          Click on any section to explore the architecture, flows, and implementation details
+        </p>
+
+        {/* Navigation Grid */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+          {sections.map((section) => {
+            const Icon = section.icon;
+            const isSelected = selectedSection === section.id;
+            return (
+              <button
+                key={section.id}
+                onClick={() => setSelectedSection(section.id)}
+                className={`p-4 rounded-lg transition-all ${
+                  isSelected
+                    ? `${section.color} text-white shadow-lg scale-105`
+                    : 'bg-white text-gray-700 hover:shadow-md hover:scale-102'
+                }`}
+              >
+                <Icon className="w-8 h-8 mx-auto mb-2" />
+                <div className="text-sm font-semibold text-center">{section.title}</div>
+              </button>
+            );
+          })}
+        </div>
+
+        {/* Content Area */}
+        <div className="bg-white rounded-xl shadow-xl p-6 min-h-[600px]">
+          {renderContent()}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default ArchitectureExplorer;
